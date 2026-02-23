@@ -99,6 +99,7 @@ Build: `pnpm build:extension`. Clean build: `pnpm clean:extension`. Source in `b
 ## Gotchas
 
 - App Runner "config from repository" mode hides the env var UI in console. Use manual config to set secrets.
+- `but` may fail with "index is locked" due to GitButler's own `background-refresh.lock` / `project.lock` — wait a few seconds and retry; do not delete these files.
 - Use `pnpx` (not `npx`) for one-off package execution — matches `pnpm` package manager.
 - `but commit` uses `-p <cli-id>` (or `--changes`) to commit specific files, not `--files` or `-F`.
 - GitHub repo: `vidluther/linkblog` - use with `gh` commands.
@@ -106,5 +107,5 @@ Build: `pnpm build:extension`. Clean build: `pnpm clean:extension`. Source in `b
 ## Tool Preferences
 
 - Use `rg` (ripgrep) for searching file contents and finding files, not `find` or `grep`
-- Use `but` (GitButler CLI) instead of `git` for all version control operations
+- Use `but` (GitButler CLI) instead of `git` for all version control operations, including PRs (`but pr new <branch>` instead of `gh pr create`)
 - Use `pnpm` instead of `npm`, `yarn`, or `bun` for package management
