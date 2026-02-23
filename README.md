@@ -23,6 +23,26 @@ My goal is to learn TypeScript, and NestJS along with Supabase. So..
 - Supabase
 - AWS App Runner
 
+### Local Development
+
+To run the service locally, you'll need to have Docker installed. Follow these steps:
+
+#### Start Supabase Locally
+
+```
+pnpx supabase start
+```
+
+Copy the .env.example to .env and update the values from the command above.
+
+#### Start NestJS API
+
+```
+pnpm start:dev
+```
+
+#### Go To Postman
+
 ### Build
 
 ```bash
