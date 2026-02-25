@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { createHash } from 'crypto';
-import { SUPABASE_CLIENT } from '../supabase/supabase.module.js';
 import { ApiKeyGuard } from './api-key.guard.js';
 
 describe('ApiKeyGuard', () => {
