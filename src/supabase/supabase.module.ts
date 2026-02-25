@@ -11,7 +11,7 @@ export const SUPABASE_CLIENT = 'SUPABASE_CLIENT';
       provide: SUPABASE_CLIENT,
       useFactory: (config: ConfigService): SupabaseClient => {
         const url = config.getOrThrow<string>('SUPABASE_URL');
-        const key = config.getOrThrow<string>('SUPABASE_PUBLISHABLE_KEY');
+        const key = config.getOrThrow<string>('SUPABASE_SERVICE_ROLE_KEY');
         return createClient(url, key, {
           auth: { autoRefreshToken: false, persistSession: false },
         });

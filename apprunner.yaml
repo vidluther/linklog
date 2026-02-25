@@ -1,6 +1,6 @@
 version: 1.0
 ### If you're using AWS App Runner, you will need to do manual
-# Configuration, because you don't want the SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY to be exposed.
+# Configuration, because you don't want the SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to be exposed.
 # In the github repo.
 runtime: nodejs22
 build:
@@ -21,7 +21,5 @@ run:
       value: production
     - name: SUPABASE_URL
       value: 'https://supabaseurl.com/'
-    - name: SUPABASE_PUBLISHABLE_KEY
+    - name: SUPABASE_SERVICE_ROLE_KEY
       value: 'jdfkjfkdljdflkjfdlkjfkdljk'
-    - name: API_KEY
-      value: 'superdupersecret'
