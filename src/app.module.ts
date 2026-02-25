@@ -7,6 +7,7 @@ import { LinksModule } from './links/links.module';
 import { FeedModule } from './feed/feed.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
+import { UsersModule } from './users/users.module.js';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
@@ -14,6 +15,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     ConfigModule.forRoot({ isGlobal: true }),
     SupabaseModule,
     AuthModule,
+    UsersModule,
     LinksModule,
     FeedModule,
     HealthModule,
