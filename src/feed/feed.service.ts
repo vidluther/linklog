@@ -14,8 +14,8 @@ export class FeedService {
     const links = await this.linksService.findAll(userId);
 
     const appUrl = this.configService.get<string>(
-      'APP_URL',
-      'https://app.linkblog.in',
+      'API_URL',
+      'https://api.linkblog.in',
     );
     const feedUrl = `${appUrl}/${username}/feed`;
 

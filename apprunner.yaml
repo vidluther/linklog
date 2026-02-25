@@ -23,5 +23,5 @@ run:
       value: 'https://supabaseurl.com/'
     - name: SUPABASE_SERVICE_ROLE_KEY
       value: 'jdfkjfkdljdflkjfdlkjfkdljk'
-    - name: APP_URL
-      value: 'https://app.linkblog.in'
+    - name: API_URL
+      value: 'https://api.linkblog.in'

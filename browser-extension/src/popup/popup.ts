@@ -1,4 +1,5 @@
 import type { SaveLinkResult, ExtensionSettings } from '../types/index.js';
+import { DEFAULT_SETTINGS } from '../types/index.js';
 
 // Chrome exposes `chrome`, Safari/Firefox expose `browser`
 const browser = globalThis.browser ?? globalThis.chrome;
@@ -66,8 +67,7 @@ async function loadActiveTab(): Promise<void> {
 async function loadSettings(): Promise<void> {
   const result = await browser.storage.sync.get('settings');
   const settings: ExtensionSettings = {
-    apiKey: '',
-    apiEndpoint: 'https://api.linkblog.in/links',
+    ...DEFAULT_SETTINGS,
     ...result.settings,
   };
   apiKeyInput.value = settings.apiKey;
@@ -103,8 +103,7 @@ async function handleSaveLink(): Promise<void> {
 async function handleSaveSettings(): Promise<void> {
   const settings: ExtensionSettings = {
     apiKey: apiKeyInput.value.trim(),
-    apiEndpoint:
-      apiEndpointInput.value.trim() || 'https://api.linkblog.in/links',
+    apiEndpoint: apiEndpointInput.value.trim() || DEFAULT_SETTINGS.apiEndpoint,
   };
 
   await browser.storage.sync.set({ settings });

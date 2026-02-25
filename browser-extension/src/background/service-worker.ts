@@ -4,14 +4,12 @@ import type {
   SaveLinkResult,
   ExtensionSettings,
 } from '../types/index.js';
+import { DEFAULT_SETTINGS } from '../types/index.js';
 
 // Chrome exposes `chrome`, Safari/Firefox expose `browser`
 const browser = globalThis.browser ?? globalThis.chrome;
 
-const DEFAULTS: ExtensionSettings = {
-  apiKey: '',
-  apiEndpoint: 'https://api.linkblog.in/links',
-};
+const DEFAULTS: ExtensionSettings = DEFAULT_SETTINGS;
 
 async function getSettings(): Promise<ExtensionSettings> {
   const result = await browser.storage.sync.get('settings');
