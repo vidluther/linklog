@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "2558c2dc-6226-48e8-bffb-4172f4d23bb3",
     "name": "Linkblog API",
-    "description": "Personal bookmarking API (NestJS + Supabase) that publishes an RSS feed.\n\n## Setup\n1. Import the **Linkblog - Local** environment\n2. Set the `apiKey` variable to your API key value (format: `lb_<64 hex chars>`)\n3. Set the `username` variable to your profile username\n4. Start the server: `pnpm start:dev`\n5. Run requests — the collection auto-captures `linkId` from create/list responses\n\n## Auth\nAll write endpoints require the `x-api-key` header. The collection inherits this from the folder-level auth config.\n\n## URL convention\nAll endpoints are user-scoped: `/:username/links`, `/:username/feed`, `/:username/api-keys`",
+    "description": "Personal bookmarking API (NestJS + Supabase) that publishes an RSS feed.\n\n## Setup\n1. Import the **Linkblog - Local** environment\n2. Set the `userApiKey` variable to your API key value (format: `lb_<64 hex chars>`)\n3. Set the `username` variable to your profile username\n4. Start the server: `pnpm start:dev`\n5. Run requests — the collection auto-captures `linkId` from create/list responses\n\n## Auth\nAll write endpoints require the `x-api-key` header. The collection inherits this from the folder-level auth config.\n\n## URL convention\nAll endpoints are user-scoped: `/:username/links`, `/:username/feed`, `/:username/api-keys`",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "19671261"
   },
@@ -509,7 +509,7 @@
           },
           {
             "key": "value",
-            "value": "{{apiKey}}",
+            "value": "{{userApiKey}}",
             "type": "string"
           },
           {
@@ -728,7 +728,7 @@
           },
           {
             "key": "value",
-            "value": "{{apiKey}}",
+            "value": "{{userApiKey}}",
             "type": "string"
           },
           {
@@ -990,7 +990,7 @@
           },
           {
             "key": "value",
-            "value": "{{apiKey}}",
+            "value": "{{userApiKey}}",
             "type": "string"
           },
           {
