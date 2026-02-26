@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "ebced492-34b2-40c0-bc20-30e72b7c62b4",
+    "_postman_id": "2558c2dc-6226-48e8-bffb-4172f4d23bb3",
     "name": "Linkblog API",
     "description": "Personal bookmarking API (NestJS + Supabase) that publishes an RSS feed.\n\n## Setup\n1. Import the **Linkblog - Local** environment\n2. Set the `apiKey` variable to your API key value (format: `lb_<64 hex chars>`)\n3. Set the `username` variable to your profile username\n4. Start the server: `pnpm start:dev`\n5. Run requests — the collection auto-captures `linkId` from create/list responses\n\n## Auth\nAll write endpoints require the `x-api-key` header. The collection inherits this from the folder-level auth config.\n\n## URL convention\nAll endpoints are user-scoped: `/:username/links`, `/:username/feed`, `/:username/api-keys`",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -34,8 +34,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/",
-              "host": ["{{baseUrl}}"],
-              "path": [""]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
             },
             "description": "Public health check endpoint. Returns 200 with \"Hello World!\" when the server is running."
           },
@@ -75,8 +79,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links"
+              ]
             },
             "description": "Attempt to create a link with no API key. Should return 401 Unauthorized."
           },
@@ -128,8 +137,82 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links"
+              ]
+            },
+            "description": "Attempt to create a link with an invalid API key. Should return 401 Unauthorized."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Link - Malformed Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 400 (Bad Request)', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{userApiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://\",\n  \"title\": \"Should Not Work\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{username}}/links",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links"
+              ]
             },
             "description": "Attempt to create a link with an invalid API key. Should return 401 Unauthorized."
           },
@@ -219,8 +302,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links"
+              ]
             },
             "description": "Create a new bookmarked link. On success, auto-saves the returned `id` to `linkId`."
           },
@@ -254,12 +342,20 @@
             }
           ],
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links"
+              ]
             },
             "description": "Get all bookmarked links for the user, ordered newest first. Auto-saves the first link's `id` to `linkId`."
           },
@@ -300,8 +396,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links/{{linkId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{linkId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links",
+                "{{linkId}}"
+              ]
             },
             "description": "Get a single link by ID. Uses `linkId` variable (auto-set by Create or List requests)."
           },
@@ -346,8 +448,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links/{{linkId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{linkId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links",
+                "{{linkId}}"
+              ]
             },
             "description": "Partially update a link. All body fields are optional. Uses `linkId` variable."
           },
@@ -376,8 +484,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links/{{linkId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{linkId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links",
+                "{{linkId}}"
+              ]
             },
             "description": "Delete a link by ID. Uses `linkId` variable. Clears `linkId` on success."
           },
@@ -442,8 +556,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/feed",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "feed"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "feed"
+              ]
             },
             "description": "Public RSS 2.0 feed of the user's links (newest first). No auth required."
           },
@@ -484,8 +603,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/api-keys",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "api-keys"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "api-keys"
+              ]
             },
             "description": "List all API keys for the authenticated user. Returns id, name, created_at, last_used_at — never the raw key or hash."
           },
@@ -544,8 +668,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{username}}/api-keys",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "api-keys"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "api-keys"
+              ]
             },
             "description": "Create a new API key. The `rawKey` field is returned only once — save it immediately. Auto-saves `apiKeyId`."
           },
@@ -574,8 +703,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/api-keys/{{apiKeyId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "api-keys", "{{apiKeyId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "api-keys",
+                "{{apiKeyId}}"
+              ]
             },
             "description": "Delete an API key by ID. Uses `apiKeyId` variable. Clears `apiKeyId` on success."
           },
@@ -640,8 +775,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links"
+              ]
             }
           },
           "response": []
@@ -671,8 +811,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links",
+                "{{workflowLinkId}}"
+              ]
             }
           },
           "response": []
@@ -711,8 +857,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links",
+                "{{workflowLinkId}}"
+              ]
             }
           },
           "response": []
@@ -747,8 +899,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links",
+                "{{workflowLinkId}}"
+              ]
             }
           },
           "response": []
@@ -773,8 +931,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links",
+                "{{workflowLinkId}}"
+              ]
             }
           },
           "response": []
@@ -802,8 +966,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{username}}",
+                "links",
+                "{{workflowLinkId}}"
+              ]
             }
           },
           "response": []
@@ -830,6 +1000,37 @@
           }
         ]
       }
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "username",
+      "value": "",
+      "type": "default"
     }
   ]
 }
