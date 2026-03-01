@@ -1,6 +1,7 @@
 ---
 layout: single
 title: Getting Started
+permalink: /getting-started/
 toc: true
 ---
 

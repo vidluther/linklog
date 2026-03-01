@@ -1,6 +1,7 @@
 ---
 layout: single
 title: Browser Extension
+permalink: /browser-extension/
 toc: true
 ---
 

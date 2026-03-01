@@ -1,6 +1,7 @@
 ---
 layout: single
 title: Edge Functions
+permalink: /edge-functions/
 toc: true
 ---
 

@@ -1,6 +1,7 @@
 ---
 layout: single
 title: API Reference
+permalink: /api/
 toc: true
 ---
 

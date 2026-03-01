@@ -15,3 +15,27 @@ main:
     url: /edge-functions
   - title: 'API Docs'
     url: https://api.linkblog.in/api-docs
+
+docs:
+  - title: 'Getting Started'
+    children:
+      - title: 'Setup'
+        url: /getting-started
+  - title: 'API'
+    children:
+      - title: 'API Reference'
+        url: /api
+  - title: 'Architecture'
+    children:
+      - title: 'Overview'
+        url: /architecture
+      - title: 'Edge Functions'
+        url: /edge-functions
+  - title: 'Operations'
+    children:
+      - title: 'Deployment'
+        url: /deployment
+  - title: 'Extensions'
+    children:
+      - title: 'Browser Extension'
+        url: /browser-extension

@@ -1,6 +1,7 @@
 ---
 layout: single
 title: Architecture
+permalink: /architecture/
 toc: true
 ---
 

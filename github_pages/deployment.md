@@ -1,6 +1,7 @@
 ---
 layout: single
 title: Deployment
+permalink: /deployment/
 toc: true
 ---
 
