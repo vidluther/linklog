@@ -15,14 +15,12 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Linkblog API')
-    .setDescription(
-      'A personal bookmarking API that publishes an RSS feed. Multi-user with per-user API key authentication.',
-    )
+    .setDescription('API Docs for the Linkblog Bookmarking Service.')
     .setVersion('1.0')
     .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'api-key')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
 }

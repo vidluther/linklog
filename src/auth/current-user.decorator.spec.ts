@@ -7,7 +7,6 @@ function getDecoratorFactory(
   decorator: () => ParameterDecorator,
 ): (ctx: ExecutionContext) => unknown {
   class TestClass {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     testMethod(@decorator() _user: unknown) {}
   }
 
