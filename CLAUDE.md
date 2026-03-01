@@ -1,13 +1,8 @@
 # CLAUDE.md
 
-Always use Context7 MCP when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
-
 # Project
 
-Linkblog Service - a personal bookmarking API (NestJS + TypeScript + Supabase) that publishes an RSS feed.
-Monorepo managed with pnpm workspaces.
-
-See `docs/implementation-plan.md` for the full implementation plan and architecture.
+Linkblog Service - This the API for Linkblog, a linkblog service.  
 
 ## Key Conventions
 
@@ -61,9 +56,7 @@ AppModule
 ## Workflow
 
 - All code changes must reference a GitHub issue. Check `gh issue list` before starting work.
-- Use `oxlint` for linting and formatting.
 - CI runs on PRs to `main` (`.github/workflows/ci.yml`): install, lint, fmt:check, build, test, plus extension lint/typecheck/build.
-- Branch protection on `main` requires the `ci` status check to pass before merge.
 
 ## Testing (Vitest)
 
