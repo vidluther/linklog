@@ -2,7 +2,7 @@
 
 # Project
 
-Linkblog Service - This the API for Linkblog, a linkblog service.  
+Linkblog Service - This the API for Linkblog, a linkblog service.
 
 ## Key Conventions
 
