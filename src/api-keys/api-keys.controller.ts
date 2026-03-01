@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
+import { ApiParam, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ApiKeysService } from './api-keys.service.js';
 import { CreateApiKeyDto } from './dto/create-api-key.dto.js';
 import { CurrentUser } from '../auth/current-user.decorator.js';
@@ -8,6 +9,12 @@ interface AuthUser {
   username: string;
 }
 
+@ApiTags('API Keys')
+@ApiParam({
+  name: 'username',
+  description: 'The username of the API key owner',
+})
+@ApiSecurity('api-key')
 @Controller(':username/api-keys')
 export class ApiKeysController {
   constructor(private readonly apiKeysService: ApiKeysService) {}

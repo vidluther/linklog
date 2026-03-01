@@ -14,7 +14,7 @@ A multi-stage build keeps the production image small:
 
 ```dockerfile
 # Stage 1: Build
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable && pnpm install --frozen-lockfile
@@ -22,7 +22,7 @@ COPY . .
 RUN pnpm build
 
 # Stage 2: Production
-FROM node:20-alpine
+FROM node:22-alpine
 WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
@@ -39,7 +39,8 @@ node_modules
 .env
 dist
 coverage
-docs
+github_pages
+browser-extension
 supabase/.temp
 ```
 
@@ -49,8 +50,8 @@ supabase/.temp
 docker build -t linkblog .
 docker run -p 3000:3000 \
   -e SUPABASE_URL=https://your-project.supabase.co \
-  -e SUPABASE_PUBLISHABLE_KEY=your-publishable-key \
-  -e API_KEY=your-api-key \
+  -e SUPABASE_SERVICE_ROLE_KEY=your-service-role-key \
+  -e API_URL=https://api.linkblog.in \
   linkblog
 ```
 
@@ -60,12 +61,12 @@ docker run -p 3000:3000 \
 
 Configure these in the App Runner service settings:
 
-| Variable                   | Description                        |
-| -------------------------- | ---------------------------------- |
-| `SUPABASE_URL`             | Supabase project URL               |
-| `SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key           |
-| `API_KEY`                  | Secret key for write endpoints     |
-| `PORT`                     | App Runner sets this automatically |
+| Variable                    | Description                        |
+| --------------------------- | ---------------------------------- |
+| `SUPABASE_URL`              | Supabase project URL               |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key          |
+| `API_URL`                   | Base URL for feed links            |
+| `PORT`                      | App Runner sets this automatically |
 
 ### Health Check
 
@@ -97,15 +98,20 @@ To use a custom domain with App Runner:
 3. Create the DNS records (CNAME) as instructed
 4. Wait for certificate validation
 
-## CI/CD (planned)
+The production API is at `api.linkblog.in`.
 
-A GitHub Actions workflow can automate deployment:
+## CI/CD
 
-1. On push to `main`:
-   - Run tests
-   - Build Docker image
-   - Push to ECR
-   - Trigger App Runner deployment
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on PRs to `main`:
+
+1. Install dependencies
+2. Lint (`oxlint`)
+3. Format check (`oxfmt --check`)
+4. Build
+5. Run tests
+6. Browser extension lint, typecheck, and build
+
+Branch protection on `main` requires the `ci` status check to pass before merge.
 
 ---
 

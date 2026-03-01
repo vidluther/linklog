@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiParam, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { LinksService } from './links.service';
 import { UsersService } from '../users/users.service.js';
 import { CreateLinkDto } from './dto/create-link.dto';
@@ -19,6 +20,9 @@ interface AuthUser {
   username: string;
 }
 
+@ApiTags('Links')
+@ApiParam({ name: 'username', description: 'The username of the link owner' })
+@ApiSecurity('api-key')
 @Controller(':username/links')
 export class LinksController {
   constructor(

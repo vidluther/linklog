@@ -9,3 +9,9 @@ main:
     url: /architecture
   - title: 'Deployment'
     url: /deployment
+  - title: 'Browser Extension'
+    url: /browser-extension
+  - title: 'Edge Functions'
+    url: /edge-functions
+  - title: 'API Docs'
+    url: https://api.linkblog.in/api-docs
