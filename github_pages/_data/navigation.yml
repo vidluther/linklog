@@ -1,41 +1,41 @@
 main:
-  - title: 'Home'
+  - title: "Home"
     url: /
-  - title: 'Getting Started'
+  - title: "Getting Started"
     url: /getting-started
-  - title: 'API Reference'
+  - title: "API Reference"
     url: /api
-  - title: 'Architecture'
+  - title: "Architecture"
     url: /architecture
-  - title: 'Deployment'
+  - title: "Deployment"
     url: /deployment
-  - title: 'Browser Extension'
+  - title: "Browser Extension"
     url: /browser-extension
-  - title: 'Edge Functions'
+  - title: "Edge Functions"
     url: /edge-functions
-  - title: 'API Docs'
-    url: https://api.linkblog.in/api-docs
+  - title: "API Docs"
+    url: https://api.linkblog.in/docs
 
 docs:
-  - title: 'Getting Started'
+  - title: "Getting Started"
     children:
-      - title: 'Setup'
+      - title: "Setup"
         url: /getting-started
-  - title: 'API'
+  - title: "API"
     children:
-      - title: 'API Reference'
+      - title: "API Reference"
         url: /api
-  - title: 'Architecture'
+  - title: "Architecture"
     children:
-      - title: 'Overview'
+      - title: "Overview"
         url: /architecture
-      - title: 'Edge Functions'
+      - title: "Edge Functions"
         url: /edge-functions
-  - title: 'Operations'
+  - title: "Operations"
     children:
-      - title: 'Deployment'
+      - title: "Deployment"
         url: /deployment
-  - title: 'Extensions'
+  - title: "Extensions"
     children:
-      - title: 'Browser Extension'
+      - title: "Browser Extension"
         url: /browser-extension

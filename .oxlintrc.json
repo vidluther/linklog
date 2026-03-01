@@ -9,7 +9,6 @@
     "jest": true,
     "node": true
   },
-  "ignorePatterns": ["eslint.config.mjs"],
   "rules": {
     "constructor-super": "error",
     "for-direction": "error",

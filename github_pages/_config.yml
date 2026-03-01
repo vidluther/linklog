@@ -1,11 +1,11 @@
 title: Linkblog
-subtitle: 'API Documentation'
+subtitle: "API Documentation"
 description: A personal bookmarking API that publishes an RSS feed
 url: https://docs.linkblog.in
-baseurl: ''
+baseurl: ""
 
 remote_theme: mmistakes/minimal-mistakes
-minimal_mistakes_skin: 'air'
+minimal_mistakes_skin: "air"
 
 markdown: kramdown
 highlighter: rouge
@@ -17,10 +17,10 @@ breadcrumbs: true
 
 defaults:
   - scope:
-      path: ''
+      path: ""
     values:
       layout: single
       sidebar:
-        nav: 'docs'
+        nav: "docs"
       toc: true
       toc_sticky: true

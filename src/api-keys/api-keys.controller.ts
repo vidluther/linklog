@@ -1,21 +1,21 @@
-import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
-import { ApiParam, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { ApiKeysService } from './api-keys.service.js';
-import { CreateApiKeyDto } from './dto/create-api-key.dto.js';
-import { CurrentUser } from '../auth/current-user.decorator.js';
+import { Controller, Get, Post, Delete, Body, Param } from "@nestjs/common";
+import { ApiParam, ApiSecurity, ApiTags } from "@nestjs/swagger";
+import { ApiKeysService } from "./api-keys.service.js";
+import { CreateApiKeyDto } from "./dto/create-api-key.dto.js";
+import { CurrentUser } from "../auth/current-user.decorator.js";
 
 interface AuthUser {
   userId: string;
   username: string;
 }
 
-@ApiTags('API Keys')
+@ApiTags("API Keys")
 @ApiParam({
-  name: 'username',
-  description: 'The username of the API key owner',
+  name: "username",
+  description: "The username of the API key owner",
 })
-@ApiSecurity('api-key')
-@Controller(':username/api-keys')
+@ApiSecurity("api-key")
+@Controller(":username/api-keys")
 export class ApiKeysController {
   constructor(private readonly apiKeysService: ApiKeysService) {}
 
@@ -29,8 +29,8 @@ export class ApiKeysController {
     return this.apiKeysService.create(dto, user.userId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+  @Delete(":id")
+  remove(@Param("id") id: string, @CurrentUser() user: AuthUser) {
     return this.apiKeysService.remove(id, user.userId);
   }
 }

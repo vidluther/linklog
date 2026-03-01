@@ -20,8 +20,8 @@ run:
     - name: NODE_ENV
       value: production
     - name: SUPABASE_URL
-      value: 'https://supabaseurl.com/'
+      value: "https://supabaseurl.com/"
     - name: SUPABASE_SERVICE_ROLE_KEY
-      value: 'jdfkjfkdljdflkjfdlkjfkdljk'
+      value: "jdfkjfkdljdflkjfdlkjfkdljk"
     - name: API_URL
-      value: 'https://api.linkblog.in'
+      value: "https://api.linkblog.in"

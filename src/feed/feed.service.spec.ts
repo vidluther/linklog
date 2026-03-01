@@ -1,21 +1,21 @@
-import { ConfigService } from '@nestjs/config';
-import { LinksService } from '../links/links.service';
-import { FeedService } from './feed.service';
+import { ConfigService } from "@nestjs/config";
+import { LinksService } from "../links/links.service";
+import { FeedService } from "./feed.service";
 
-const USER_ID = 'user-uuid-1';
-const USERNAME = 'alice';
+const USER_ID = "user-uuid-1";
+const USERNAME = "alice";
 
 const mockLink = {
   id: 1,
   user_id: USER_ID,
-  url: 'https://example.com',
-  title: 'Example Link',
-  summary: 'A summary',
-  created_at: '2026-01-01T00:00:00.000Z',
-  updated_at: '2026-01-01T00:00:00.000Z',
+  url: "https://example.com",
+  title: "Example Link",
+  summary: "A summary",
+  created_at: "2026-01-01T00:00:00.000Z",
+  updated_at: "2026-01-01T00:00:00.000Z",
 };
 
-describe('FeedService', () => {
+describe("FeedService", () => {
   let service: FeedService;
   let linksService: LinksService;
 
@@ -25,49 +25,49 @@ describe('FeedService', () => {
     } as unknown as LinksService;
 
     const configService = {
-      get: vi.fn().mockReturnValue('http://localhost:3000'),
+      get: vi.fn().mockReturnValue("http://localhost:3000"),
     } as unknown as ConfigService;
 
     service = new FeedService(linksService, configService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 
-  describe('generateRssFeed', () => {
-    it('should call linksService.findAll with the given userId', async () => {
+  describe("generateRssFeed", () => {
+    it("should call linksService.findAll with the given userId", async () => {
       await service.generateRssFeed(USER_ID, USERNAME);
 
       expect(linksService.findAll).toHaveBeenCalledWith(USER_ID);
     });
 
-    it('should return a string of RSS XML', async () => {
+    it("should return a string of RSS XML", async () => {
       const result = await service.generateRssFeed(USER_ID, USERNAME);
 
-      expect(typeof result).toBe('string');
-      expect(result).toContain('<rss');
-      expect(result).toContain('<channel>');
+      expect(typeof result).toBe("string");
+      expect(result).toContain("<rss");
+      expect(result).toContain("<channel>");
     });
 
-    it('should include the username in the feed title', async () => {
+    it("should include the username in the feed title", async () => {
       const result = await service.generateRssFeed(USER_ID, USERNAME);
 
       expect(result).toContain(USERNAME);
     });
 
-    it('should include link items in the feed', async () => {
+    it("should include link items in the feed", async () => {
       const result = await service.generateRssFeed(USER_ID, USERNAME);
 
-      expect(result).toContain('https://example.com');
+      expect(result).toContain("https://example.com");
     });
 
-    it('should return a valid feed with no items when links list is empty', async () => {
+    it("should return a valid feed with no items when links list is empty", async () => {
       vi.mocked(linksService.findAll).mockResolvedValue([]);
 
       const result = await service.generateRssFeed(USER_ID, USERNAME);
 
-      expect(result).toContain('<channel>');
+      expect(result).toContain("<channel>");
     });
   });
 });

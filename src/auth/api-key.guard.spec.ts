@@ -2,20 +2,20 @@ import {
   ExecutionContext,
   ForbiddenException,
   UnauthorizedException,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { createHash } from 'crypto';
-import { ApiKeyGuard } from './api-key.guard.js';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { createHash } from "crypto";
+import { ApiKeyGuard } from "./api-key.guard.js";
 
-describe('ApiKeyGuard', () => {
+describe("ApiKeyGuard", () => {
   let guard: ApiKeyGuard;
   let reflector: Reflector;
   let supabase: Record<string, unknown>;
 
-  const RAW_KEY = 'lb_' + 'a'.repeat(64);
-  const KEY_HASH = createHash('sha256').update(RAW_KEY).digest('hex');
-  const USER_ID = 'user-uuid-1';
-  const USERNAME = 'alice';
+  const RAW_KEY = "lb_" + "a".repeat(64);
+  const KEY_HASH = createHash("sha256").update(RAW_KEY).digest("hex");
+  const USER_ID = "user-uuid-1";
+  const USERNAME = "alice";
 
   function buildSupabaseMock(opts: {
     apiKeyRow?: Record<string, unknown> | null;
@@ -56,9 +56,9 @@ describe('ApiKeyGuard', () => {
     };
 
     const fromMock = vi.fn((table: string) => {
-      if (table === 'api_keys')
+      if (table === "api_keys")
         return { ...apiKeyBuilder, update: vi.fn(() => updateBuilder) };
-      if (table === 'profiles') return profileBuilder;
+      if (table === "profiles") return profileBuilder;
       return {};
     });
 
@@ -91,12 +91,12 @@ describe('ApiKeyGuard', () => {
     guard = new ApiKeyGuard(reflector, supabase as never);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(guard).toBeDefined();
   });
 
-  it('should allow access for @Public() routes without querying DB', async () => {
-    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(true);
+  it("should allow access for @Public() routes without querying DB", async () => {
+    vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(true);
     const ctx = createMockContext({ isPublic: true });
 
     const result = await guard.canActivate(ctx);
@@ -107,58 +107,58 @@ describe('ApiKeyGuard', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should throw 401 when x-api-key header is missing', async () => {
-    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
+  it("should throw 401 when x-api-key header is missing", async () => {
+    vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     const ctx = createMockContext({ headers: {} });
 
     await expect(guard.canActivate(ctx)).rejects.toThrow(UnauthorizedException);
     await expect(guard.canActivate(ctx)).rejects.toThrow(
-      'Missing x-api-key header',
+      "Missing x-api-key header",
     );
   });
 
-  it('should throw 401 when key hash is not found in api_keys table', async () => {
-    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
+  it("should throw 401 when key hash is not found in api_keys table", async () => {
+    vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     supabase = buildSupabaseMock({
       apiKeyRow: null,
-      apiKeyError: { code: 'PGRST116', message: 'no rows' },
+      apiKeyError: { code: "PGRST116", message: "no rows" },
     });
     guard = new ApiKeyGuard(reflector, supabase as never);
-    const ctx = createMockContext({ headers: { 'x-api-key': RAW_KEY } });
+    const ctx = createMockContext({ headers: { "x-api-key": RAW_KEY } });
 
     await expect(guard.canActivate(ctx)).rejects.toThrow(UnauthorizedException);
-    await expect(guard.canActivate(ctx)).rejects.toThrow('Invalid API key');
+    await expect(guard.canActivate(ctx)).rejects.toThrow("Invalid API key");
   });
 
-  it('should throw 401 on unexpected DB error when looking up key', async () => {
-    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
+  it("should throw 401 on unexpected DB error when looking up key", async () => {
+    vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     supabase = buildSupabaseMock({
       apiKeyRow: null,
-      apiKeyError: { code: '500', message: 'DB exploded' },
+      apiKeyError: { code: "500", message: "DB exploded" },
     });
     guard = new ApiKeyGuard(reflector, supabase as never);
-    const ctx = createMockContext({ headers: { 'x-api-key': RAW_KEY } });
+    const ctx = createMockContext({ headers: { "x-api-key": RAW_KEY } });
 
     await expect(guard.canActivate(ctx)).rejects.toThrow(UnauthorizedException);
   });
 
-  it('should throw 403 when username param does not match key owner', async () => {
-    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
+  it("should throw 403 when username param does not match key owner", async () => {
+    vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     const ctx = createMockContext({
-      headers: { 'x-api-key': RAW_KEY },
-      params: { username: 'bob' }, // key belongs to 'alice'
+      headers: { "x-api-key": RAW_KEY },
+      params: { username: "bob" }, // key belongs to 'alice'
     });
 
     await expect(guard.canActivate(ctx)).rejects.toThrow(ForbiddenException);
     await expect(guard.canActivate(ctx)).rejects.toThrow(
-      'API key does not match the requested user',
+      "API key does not match the requested user",
     );
   });
 
-  it('should attach request.user and return true for valid key with matching username', async () => {
-    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
+  it("should attach request.user and return true for valid key with matching username", async () => {
+    vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     const ctx = createMockContext({
-      headers: { 'x-api-key': RAW_KEY },
+      headers: { "x-api-key": RAW_KEY },
       params: { username: USERNAME },
     });
     const req = ctx.switchToHttp().getRequest();
@@ -169,10 +169,10 @@ describe('ApiKeyGuard', () => {
     expect(req.user).toEqual({ userId: USER_ID, username: USERNAME });
   });
 
-  it('should attach request.user and return true when no username param (non-user-scoped route)', async () => {
-    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
+  it("should attach request.user and return true when no username param (non-user-scoped route)", async () => {
+    vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     const ctx = createMockContext({
-      headers: { 'x-api-key': RAW_KEY },
+      headers: { "x-api-key": RAW_KEY },
       params: {},
     });
     const req = ctx.switchToHttp().getRequest();
@@ -183,8 +183,8 @@ describe('ApiKeyGuard', () => {
     expect(req.user).toEqual({ userId: USER_ID, username: USERNAME });
   });
 
-  it('should update last_used_at asynchronously (fire-and-forget)', async () => {
-    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
+  it("should update last_used_at asynchronously (fire-and-forget)", async () => {
+    vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
 
     // Rebuild mock so we can check the update call
     const updateEqMock = vi.fn().mockReturnThis();
@@ -200,7 +200,7 @@ describe('ApiKeyGuard', () => {
     });
 
     const fromMock = vi.fn((table: string) => {
-      if (table === 'api_keys') {
+      if (table === "api_keys") {
         return {
           select: vi.fn().mockReturnThis(),
           eq: vi.fn().mockReturnThis(),
@@ -218,7 +218,7 @@ describe('ApiKeyGuard', () => {
     guard = new ApiKeyGuard(reflector, { from: fromMock } as never);
 
     const ctx = createMockContext({
-      headers: { 'x-api-key': RAW_KEY },
+      headers: { "x-api-key": RAW_KEY },
       params: { username: USERNAME },
     });
 
@@ -227,6 +227,6 @@ describe('ApiKeyGuard', () => {
     expect(updateMock).toHaveBeenCalledWith({
       last_used_at: expect.any(String),
     });
-    expect(updateEqMock).toHaveBeenCalledWith('key_hash', KEY_HASH);
+    expect(updateEqMock).toHaveBeenCalledWith("key_hash", KEY_HASH);
   });
 });

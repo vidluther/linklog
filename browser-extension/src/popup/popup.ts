@@ -1,35 +1,35 @@
-import type { SaveLinkResult, ExtensionSettings } from '../types/index.js';
-import { DEFAULT_SETTINGS } from '../types/index.js';
+import type { SaveLinkResult, ExtensionSettings } from "../types/index.js";
+import { DEFAULT_SETTINGS } from "../types/index.js";
 
 // Chrome exposes `chrome`, Safari/Firefox expose `browser`
 const browser = globalThis.browser ?? globalThis.chrome;
 
-const saveBtn = document.getElementById('save-btn') as HTMLButtonElement;
-const currentUrlEl = document.getElementById('current-url') as HTMLDivElement;
+const saveBtn = document.getElementById("save-btn") as HTMLButtonElement;
+const currentUrlEl = document.getElementById("current-url") as HTMLDivElement;
 const statusMessageEl = document.getElementById(
-  'status-message',
+  "status-message",
 ) as HTMLDivElement;
-const apiKeyInput = document.getElementById('api-key') as HTMLInputElement;
+const apiKeyInput = document.getElementById("api-key") as HTMLInputElement;
 const apiEndpointInput = document.getElementById(
-  'api-endpoint',
+  "api-endpoint",
 ) as HTMLInputElement;
 const saveSettingsBtn = document.getElementById(
-  'save-settings-btn',
+  "save-settings-btn",
 ) as HTMLButtonElement;
 const settingsMessageEl = document.getElementById(
-  'settings-message',
+  "settings-message",
 ) as HTMLDivElement;
-const titleInput = document.getElementById('link-title') as HTMLInputElement;
+const titleInput = document.getElementById("link-title") as HTMLInputElement;
 const summaryInput = document.getElementById(
-  'link-summary',
+  "link-summary",
 ) as HTMLTextAreaElement;
 const toggleApiKeyBtn = document.getElementById(
-  'toggle-api-key',
+  "toggle-api-key",
 ) as HTMLButtonElement;
-const eyeIcon = document.getElementById('eye-icon') as HTMLElement;
-const eyeOffIcon = document.getElementById('eye-off-icon') as HTMLElement;
+const eyeIcon = document.getElementById("eye-icon") as HTMLElement;
+const eyeOffIcon = document.getElementById("eye-off-icon") as HTMLElement;
 
-let activeTabUrl = '';
+let activeTabUrl = "";
 
 function showStatus(
   element: HTMLDivElement,
@@ -37,17 +37,17 @@ function showStatus(
   isSuccess: boolean,
 ): void {
   element.textContent = message;
-  element.className = `status-message ${isSuccess ? 'success' : 'error'}`;
+  element.className = `status-message ${isSuccess ? "success" : "error"}`;
   setTimeout(() => {
-    element.className = 'status-message hidden';
+    element.className = "status-message hidden";
   }, 4000);
 }
 
 function toggleApiKeyVisibility(): void {
-  const isPassword = apiKeyInput.type === 'password';
-  apiKeyInput.type = isPassword ? 'text' : 'password';
-  eyeIcon.classList.toggle('hidden', isPassword);
-  eyeOffIcon.classList.toggle('hidden', !isPassword);
+  const isPassword = apiKeyInput.type === "password";
+  apiKeyInput.type = isPassword ? "text" : "password";
+  eyeIcon.classList.toggle("hidden", isPassword);
+  eyeOffIcon.classList.toggle("hidden", !isPassword);
 }
 
 async function loadActiveTab(): Promise<void> {
@@ -59,13 +59,13 @@ async function loadActiveTab(): Promise<void> {
       titleInput.value = tab.title;
     }
   } else {
-    currentUrlEl.textContent = 'No URL available';
+    currentUrlEl.textContent = "No URL available";
     saveBtn.disabled = true;
   }
 }
 
 async function loadSettings(): Promise<void> {
-  const result = await browser.storage.sync.get('settings');
+  const result = await browser.storage.sync.get("settings");
   const settings: ExtensionSettings = {
     ...DEFAULT_SETTINGS,
     ...result.settings,
@@ -78,25 +78,25 @@ async function handleSaveLink(): Promise<void> {
   if (!activeTabUrl) return;
 
   saveBtn.disabled = true;
-  saveBtn.textContent = 'Saving...';
+  saveBtn.textContent = "Saving...";
 
   const title = titleInput.value.trim() || undefined;
   const summary = summaryInput.value.trim() || undefined;
 
   const result: SaveLinkResult = await browser.runtime.sendMessage({
-    type: 'SAVE_LINK',
+    type: "SAVE_LINK",
     url: activeTabUrl,
     title,
     summary,
   });
 
   saveBtn.disabled = false;
-  saveBtn.textContent = 'Save to Linkblog';
+  saveBtn.textContent = "Save to Linkblog";
 
   if (result.success) {
-    showStatus(statusMessageEl, `Saved: ${result.title ?? 'Link saved'}`, true);
+    showStatus(statusMessageEl, `Saved: ${result.title ?? "Link saved"}`, true);
   } else {
-    showStatus(statusMessageEl, result.error ?? 'Failed to save', false);
+    showStatus(statusMessageEl, result.error ?? "Failed to save", false);
   }
 }
 
@@ -107,12 +107,12 @@ async function handleSaveSettings(): Promise<void> {
   };
 
   await browser.storage.sync.set({ settings });
-  showStatus(settingsMessageEl, 'Settings saved', true);
+  showStatus(settingsMessageEl, "Settings saved", true);
 }
 
-saveBtn.addEventListener('click', handleSaveLink);
-saveSettingsBtn.addEventListener('click', handleSaveSettings);
-toggleApiKeyBtn.addEventListener('click', toggleApiKeyVisibility);
+saveBtn.addEventListener("click", handleSaveLink);
+saveSettingsBtn.addEventListener("click", handleSaveSettings);
+toggleApiKeyBtn.addEventListener("click", toggleApiKeyVisibility);
 
 loadActiveTab();
 loadSettings();

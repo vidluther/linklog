@@ -1,18 +1,18 @@
-import { ApiKeysController } from './api-keys.controller';
-import { ApiKeysService } from './api-keys.service';
-import { IS_PUBLIC_KEY } from '../auth/public.decorator';
+import { ApiKeysController } from "./api-keys.controller";
+import { ApiKeysService } from "./api-keys.service";
+import { IS_PUBLIC_KEY } from "../auth/public.decorator";
 
-const USER_ID = 'user-uuid-1';
-const USERNAME = 'alice';
+const USER_ID = "user-uuid-1";
+const USERNAME = "alice";
 
 const mockApiKey = {
-  id: 'key-uuid-1',
-  name: 'My Key',
-  created_at: '2026-01-01T00:00:00.000Z',
+  id: "key-uuid-1",
+  name: "My Key",
+  created_at: "2026-01-01T00:00:00.000Z",
   last_used_at: null,
 };
 
-describe('ApiKeysController', () => {
+describe("ApiKeysController", () => {
   let controller: ApiKeysController;
   let service: ApiKeysService;
 
@@ -26,12 +26,12 @@ describe('ApiKeysController', () => {
     controller = new ApiKeysController(service);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should delegate to ApiKeysService.findAll with userId from CurrentUser', async () => {
+  describe("findAll", () => {
+    it("should delegate to ApiKeysService.findAll with userId from CurrentUser", async () => {
       vi.mocked(service.findAll).mockResolvedValue([mockApiKey]);
 
       const result = await controller.findAll({
@@ -44,12 +44,12 @@ describe('ApiKeysController', () => {
     });
   });
 
-  describe('create', () => {
-    it('should delegate to ApiKeysService.create and return result with rawKey', async () => {
-      const created = { ...mockApiKey, rawKey: 'lb_' + 'a'.repeat(64) };
+  describe("create", () => {
+    it("should delegate to ApiKeysService.create and return result with rawKey", async () => {
+      const created = { ...mockApiKey, rawKey: "lb_" + "a".repeat(64) };
       vi.mocked(service.create).mockResolvedValue(created);
 
-      const dto = { name: 'My Key' };
+      const dto = { name: "My Key" };
       const result = await controller.create(dto, {
         userId: USER_ID,
         username: USERNAME,
@@ -60,32 +60,32 @@ describe('ApiKeysController', () => {
     });
   });
 
-  describe('remove', () => {
-    it('should delegate to ApiKeysService.remove with id and userId from CurrentUser', async () => {
+  describe("remove", () => {
+    it("should delegate to ApiKeysService.remove with id and userId from CurrentUser", async () => {
       vi.mocked(service.remove).mockResolvedValue(undefined);
 
-      const result = await controller.remove('key-uuid-1', {
+      const result = await controller.remove("key-uuid-1", {
         userId: USER_ID,
         username: USERNAME,
       });
 
-      expect(service.remove).toHaveBeenCalledWith('key-uuid-1', USER_ID);
+      expect(service.remove).toHaveBeenCalledWith("key-uuid-1", USER_ID);
       expect(result).toBeUndefined();
     });
   });
 
-  describe('@Public() decorator', () => {
-    it('should NOT mark findAll as public', () => {
+  describe("@Public() decorator", () => {
+    it("should NOT mark findAll as public", () => {
       const metadata = Reflect.getMetadata(IS_PUBLIC_KEY, controller.findAll);
       expect(metadata).toBeUndefined();
     });
 
-    it('should NOT mark create as public', () => {
+    it("should NOT mark create as public", () => {
       const metadata = Reflect.getMetadata(IS_PUBLIC_KEY, controller.create);
       expect(metadata).toBeUndefined();
     });
 
-    it('should NOT mark remove as public', () => {
+    it("should NOT mark remove as public", () => {
       const metadata = Reflect.getMetadata(IS_PUBLIC_KEY, controller.remove);
       expect(metadata).toBeUndefined();
     });

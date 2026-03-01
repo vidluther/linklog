@@ -30,7 +30,7 @@ Linkblog is a multi-user bookmarking API. There is no frontend — it is designe
                           │  /:username/feed   (RSS)      │
                           │  /:username/api-keys (mgmt)   │
                           │  /health           (public)   │
-                          │  /api-docs         (Swagger)  │
+                          │  /docs             (Swagger)  │
                           └───────────────────────────────┘
                                           │
                                      Docker │
@@ -133,7 +133,7 @@ A Postgres trigger fires on `INSERT` to the `links` table when the title is empt
 
 ### No frontend (yet)
 
-The API is meant to be called from the [browser extension](browser-extension), scripts, iOS shortcuts, or CLI tools. OpenAPI documentation is available at `/api-docs` to support future frontend development.
+The API is meant to be called from the [browser extension](browser-extension), scripts, iOS shortcuts, or CLI tools. OpenAPI documentation is available at `/docs` to support future frontend development.
 
 ## Request Flow (Protected Endpoints)
 

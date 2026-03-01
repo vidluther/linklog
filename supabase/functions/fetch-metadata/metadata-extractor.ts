@@ -1,8 +1,8 @@
-import { parseHTML } from 'linkedom';
+import { parseHTML } from "linkedom";
 
 const FETCH_TIMEOUT_MS = 10_000;
 const MAX_RESPONSE_BYTES = 5_000_000;
-const USER_AGENT = 'Dogmatix/1.0 (+https://api.linkblog.in)';
+const USER_AGENT = "Dogmatix/1.0 (+https://api.linkblog.in)";
 const MAX_TITLE_LENGTH = 500;
 const MAX_DESCRIPTION_LENGTH = 1000;
 
@@ -21,10 +21,10 @@ function validateUrl(url: string): void {
   try {
     parsed = new URL(url);
   } catch {
-    throw new Error('Invalid URL format');
+    throw new Error("Invalid URL format");
   }
 
-  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
     throw new Error(
       `URL Scheme not allowed(not http or https): ${parsed.protocol}`,
     );
@@ -33,11 +33,11 @@ function validateUrl(url: string): void {
   const hostname = parsed.hostname.toLowerCase();
 
   if (
-    hostname === 'localhost' ||
-    hostname === '127.0.0.1' ||
-    hostname === '::1'
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1"
   ) {
-    throw new Error('Localhost not allowed');
+    throw new Error("Localhost not allowed");
   }
 
   // Block private/reserved IPv4 ranges
@@ -50,7 +50,7 @@ function validateUrl(url: string): void {
       (a === 192 && b === 168) ||
       (a === 169 && b === 254)
     ) {
-      throw new Error('Private IP address not allowed');
+      throw new Error("Private IP address not allowed");
     }
   }
 }
@@ -59,10 +59,10 @@ function extractFromDocument(document: Document, url: string): Metadata {
   // Title priority: og:title → <title> → URL hostname
   const ogTitle = document
     .querySelector('meta[property="og:title"]')
-    ?.getAttribute('content')
+    ?.getAttribute("content")
     ?.trim();
 
-  const titleTag = document.querySelector('title')?.textContent?.trim();
+  const titleTag = document.querySelector("title")?.textContent?.trim();
 
   let hostname: string | null = null;
   try {
@@ -76,12 +76,12 @@ function extractFromDocument(document: Document, url: string): Metadata {
   // Description priority: og:description → meta description → null
   const ogDescription = document
     .querySelector('meta[property="og:description"]')
-    ?.getAttribute('content')
+    ?.getAttribute("content")
     ?.trim();
 
   const metaDescription = document
     .querySelector('meta[name="description"]')
-    ?.getAttribute('content')
+    ?.getAttribute("content")
     ?.trim();
 
   const description = ogDescription || metaDescription || null;
@@ -101,25 +101,25 @@ export async function fetchMetadata(url: string): Promise<Metadata> {
   try {
     const response = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': USER_AGENT },
-      redirect: 'follow',
+      headers: { "User-Agent": USER_AGENT },
+      redirect: "follow",
     });
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status} ${response.statusText}`);
     }
 
-    const contentType = response.headers.get('content-type') ?? '';
+    const contentType = response.headers.get("content-type") ?? "";
     if (
-      !contentType.includes('text/html') &&
-      !contentType.includes('application/xhtml')
+      !contentType.includes("text/html") &&
+      !contentType.includes("application/xhtml")
     ) {
       throw new Error(`Unsupported content type: ${contentType}`);
     }
 
-    const contentLength = response.headers.get('content-length');
+    const contentLength = response.headers.get("content-length");
     if (contentLength && parseInt(contentLength, 10) > MAX_RESPONSE_BYTES) {
-      throw new Error('Response too large');
+      throw new Error("Response too large");
     }
 
     const html = await response.text();

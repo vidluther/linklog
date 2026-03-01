@@ -52,10 +52,10 @@ pnpm build:extension    # Build browser extension
 Order: NestJS → external libs → local imports. Use path aliases (`@/`) and `.js` extension for relative imports.
 
 ```typescript
-import { Controller, Get } from '@nestjs/common';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { LinksService } from './links.service.js';
-import { CreateLinkDto } from './dto/create-link.dto.js';
+import { Controller, Get } from "@nestjs/common";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { LinksService } from "./links.service.js";
+import { CreateLinkDto } from "./dto/create-link.dto.js";
 ```
 
 ### Naming
@@ -77,7 +77,7 @@ import { CreateLinkDto } from './dto/create-link.dto.js';
 **Controllers**: Thin route handlers - delegate to services. Use `@Public()` for public endpoints.
 
 ```typescript
-@Controller('links')
+@Controller("links")
 export class LinksController {
   constructor(private readonly linksService: LinksService) {}
 
@@ -100,13 +100,13 @@ export class LinksService {
 
   async findOne(id: number): Promise<Link> {
     const { data, error } = await this.supabase
-      .from('links')
-      .select('*')
-      .eq('id', id)
+      .from("links")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {
+      if (error.code === "PGRST116") {
         throw new NotFoundException(`Link #${id} not found`);
       }
       throw new InternalServerErrorException(error.message);

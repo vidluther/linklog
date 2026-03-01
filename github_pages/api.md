@@ -9,7 +9,7 @@ Base URL: `http://localhost:3000` (local) or `https://api.linkblog.in` (producti
 
 > **Tip:** A ready-to-use Postman collection is available in `postman/Linkblog API.postman_collection.json` with pre-built requests, test scripts, and a CRUD workflow runner. See [Getting Started](getting-started#using-postman) for setup.
 
-> **Interactive docs:** Visit [`/api-docs`](https://api.linkblog.in/api-docs) for the Swagger UI with all endpoints, schemas, and a "Try it out" feature.
+> **Interactive docs:** Visit [`/docs`](https://api.linkblog.in/docs) for the Swagger UI with all endpoints, schemas, and a "Try it out" feature.
 
 ## Authentication
 

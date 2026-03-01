@@ -14,7 +14,7 @@ export interface LinkblogErrorResponse {
 }
 
 export interface SaveLinkRequest {
-  type: 'SAVE_LINK';
+  type: "SAVE_LINK";
   url: string;
   title?: string;
   summary?: string;
@@ -34,6 +34,6 @@ export interface ExtensionSettings {
 // Default endpoint placeholder — users must replace {your-username} with their actual username.
 // Format: https://api.linkblog.in/{your-username}/links
 export const DEFAULT_SETTINGS: ExtensionSettings = {
-  apiKey: '',
-  apiEndpoint: 'https://api.linkblog.in/{your-username}/links',
+  apiKey: "",
+  apiEndpoint: "https://api.linkblog.in/{your-username}/links",
 };

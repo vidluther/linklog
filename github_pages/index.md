@@ -5,7 +5,9 @@ permalink: /
 toc: false
 ---
 
-A personal bookmarking API built with **NestJS**, **TypeScript**, and **Supabase**. It stores articles with notes and publishes them as a public **RSS 2.0 feed** for the blogroll at [luther.io/blogroll](https://luther.io/blogroll).
+A personal bookmarking service built with **NestJS**, **TypeScript**, and **Supabase**.
+
+Example at: [Vid Luther](https://luther.io/)
 
 ## What It Does
 
@@ -23,7 +25,7 @@ A personal bookmarking API built with **NestJS**, **TypeScript**, and **Supabase
 - [Deployment](deployment) -- Ship to AWS App Runner
 - [Browser Extension](browser-extension) -- Chrome/Safari extension docs
 - [Edge Functions](edge-functions) -- Supabase Edge Function docs
-- [API Docs (Swagger)](https://api.linkblog.in/api-docs) -- Interactive API documentation
+- [API Docs (Swagger)](https://api.linkblog.in/docs) -- Interactive API documentation
 
 ## Tech Stack
 

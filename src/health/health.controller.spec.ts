@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { HealthController } from './health.controller';
-import { IS_PUBLIC_KEY } from '../auth/public.decorator';
+import { Test, TestingModule } from "@nestjs/testing";
+import { HealthController } from "./health.controller";
+import { IS_PUBLIC_KEY } from "../auth/public.decorator";
 
-describe('HealthController', () => {
+describe("HealthController", () => {
   let controller: HealthController;
 
   beforeEach(async () => {
@@ -13,16 +13,16 @@ describe('HealthController', () => {
     controller = module.get<HealthController>(HealthController);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 
-  describe('check', () => {
+  describe("check", () => {
     it('should return { status: "ok" }', () => {
-      expect(controller.check()).toEqual({ status: 'ok' });
+      expect(controller.check()).toEqual({ status: "ok" });
     });
 
-    it('should be marked @Public()', () => {
+    it("should be marked @Public()", () => {
       const metadata = Reflect.getMetadata(IS_PUBLIC_KEY, controller.check);
       expect(metadata).toBe(true);
     });
