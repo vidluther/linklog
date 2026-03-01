@@ -22,7 +22,6 @@ A personal bookmarking API built with **NestJS**, **TypeScript**, and **Supabase
 - [Browser Extension](browser-extension) -- Chrome/Safari extension docs
 - [Edge Functions](edge-functions) -- Supabase Edge Function docs
 - [API Docs (Swagger)](https://api.linkblog.in/api-docs) -- Interactive API documentation
-- [Implementation Plan](implementation-plan) -- Roadmap and issue tracker
 
 ## Tech Stack
 
