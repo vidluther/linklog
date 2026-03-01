@@ -78,7 +78,7 @@ pnpm build
 pnpm start:prod
 ```
 
-The API will be available at `http://localhost:3000`. Interactive API docs are at `http://localhost:3000/api-docs`.
+The API will be available at `http://localhost:3000`. Interactive API docs are at `http://localhost:3000/docs`.
 
 ## Run Tests
 

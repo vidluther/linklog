@@ -25,7 +25,7 @@ Example at: [Vid Luther](https://luther.io/)
 - [Deployment](deployment) -- Ship to AWS App Runner
 - [Browser Extension](browser-extension) -- Chrome/Safari extension docs
 - [Edge Functions](edge-functions) -- Supabase Edge Function docs
-- [API Docs (Swagger)](https://api.linkblog.in/api-docs) -- Interactive API documentation
+- [API Docs (Swagger)](https://api.linkblog.in/docs) -- Interactive API documentation
 
 ## Tech Stack
 

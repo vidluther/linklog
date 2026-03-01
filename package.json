@@ -25,7 +25,8 @@
     "test:debug": "vitest --run",
     "test:e2e": "vitest --config ./vitest.config.e2e.ts",
     "build:extension": "pnpm --filter linkblog-extension build",
-    "clean:extension": "pnpm --filter linkblog-extension clean"
+    "clean:extension": "pnpm --filter linkblog-extension clean",
+    "prepare": "husky"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.13",
