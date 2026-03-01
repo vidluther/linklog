@@ -3,3 +3,4 @@ node_modules
 dist
 netlify/.netlify
 .DS_Store
+.claude.local.md

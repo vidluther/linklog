@@ -11,9 +11,9 @@ See `docs/implementation-plan.md` for the full implementation plan and architect
 
 ## Key Conventions
 
-- **Endpoints:** `/links` (CRUD; reads public, writes protected), `/feed` (public RSS 2.0), `/health` (public)
-- **Auth:** Single-user, global `ApiKeyGuard` via `APP_GUARD`. Write endpoints require `x-api-key` header matching `API_KEY` env var. Public routes use `@Public()` decorator to opt out. See `src/auth/`.
-- **Data model:** `links` table in Supabase (id, url, title, summary, created_at, updated_at)
+- **Endpoints:** `/:username/links` (CRUD; reads public, writes protected), `/:username/feed` (public RSS 2.0), `/:username/api-keys` (key management, protected), `/health` (public), `/api-docs` (Swagger UI)
+- **Auth:** Multi-user, global `ApiKeyGuard` via `APP_GUARD`. Write endpoints require `x-api-key` header (per-user keys stored as SHA-256 hashes in `api_keys` table). Public routes use `@Public()` decorator to opt out. See `src/auth/`.
+- **Data model:** Supabase tables: `links` (id, url, title, summary, user_id, created_at, updated_at), `profiles` (id, username), `api_keys` (id, user_id, name, key_hash, created_at, last_used_at), `app_config` (key, value)
 - **Deploy:** AWS App Runner (manual console config; `apprunner.yaml` is reference only). Production URL: `api.linkblog.in`
 
 ## Commands
@@ -28,8 +28,8 @@ See `docs/implementation-plan.md` for the full implementation plan and architect
 ## Environment Variables
 
 - `SUPABASE_URL` - Supabase project URL
-- `SUPABASE_PUBLISHABLE_KEY` - Supabase publishable key
-- `API_KEY` - Protects write endpoints via `x-api-key` header
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (bypasses RLS)
+- `API_URL` - Base URL for feed links (defaults to production URL)
 - `PORT` - Server port (set by App Runner in production)
 
 ## Supabase JS Client (`@supabase/supabase-js`)
@@ -44,8 +44,11 @@ See `docs/implementation-plan.md` for the full implementation plan and architect
 ```
 AppModule
 ├── ConfigModule       (global, loads .env)
+├── LoggerModule       (global, nestjs-pino structured logging)
 ├── SupabaseModule     (global, provides SUPABASE_CLIENT token)
 ├── AuthModule         (global ApiKeyGuard via APP_GUARD)
+├── UsersModule        (username → user_id lookups)
+├── ApiKeysModule      (per-user API key CRUD)
 ├── LinksModule        (CRUD service + controller)
 ├── FeedModule         (RSS feed generation)
 └── HealthModule       (GET /health for App Runner)
