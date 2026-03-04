@@ -13,7 +13,7 @@ Base URL: `http://localhost:3000` (local) or `https://api.linkblog.in` (producti
 
 ## Authentication
 
-Linkblog uses **per-user API keys** to protect write endpoints. Each user can create multiple named API keys via the [`/:username/api-keys`](#api-key-management) endpoints.
+Linkblog uses **per-user API keys** to protect write endpoints. Each user can create multiple named API keys via the [`/:handle/api-keys`](#api-key-management) endpoints.
 
 Keys are passed as a request header:
 
@@ -25,10 +25,10 @@ When a request arrives:
 
 1. The API hashes the key with SHA-256
 2. Looks up the hash in the `api_keys` table to find the owning `user_id`
-3. Resolves the user's `username` from the `profiles` table
-4. If the URL contains a `:username` param, verifies the key owner matches — returns `403 Forbidden` if they don't
+3. Resolves the user's `handle` from the `profiles` table
+4. If the URL contains a `:handle` param, verifies the key owner matches — returns `403 Forbidden` if they don't
 
-Read endpoints (`GET /:username/links`, `GET /:username/links/:id`), the RSS feed (`GET /:username/feed`), and the health check (`GET /health`) are **public** — no API key required.
+Read endpoints (`GET /:handle/links`, `GET /:handle/links/:id`), the RSS feed (`GET /:handle/feed`), and the health check (`GET /health`) are **public** — no API key required.
 
 ---
 
@@ -52,7 +52,7 @@ curl http://localhost:3000/health
 
 ---
 
-### `POST /:username/links`
+### `POST /:handle/links`
 
 Create a new link.
 
@@ -101,7 +101,7 @@ curl -X POST http://localhost:3000/alice/links \
 
 ---
 
-### `GET /:username/links`
+### `GET /:handle/links`
 
 List all links for a user, sorted by newest first.
 
@@ -138,7 +138,7 @@ curl http://localhost:3000/alice/links
 
 ---
 
-### `GET /:username/links/:id`
+### `GET /:handle/links/:id`
 
 Get a single link by ID.
 
@@ -166,7 +166,7 @@ curl http://localhost:3000/alice/links/1
 
 ---
 
-### `PATCH /:username/links/:id`
+### `PATCH /:handle/links/:id`
 
 Update an existing link.
 
@@ -202,7 +202,7 @@ curl -X PATCH http://localhost:3000/alice/links/1 \
 
 ---
 
-### `DELETE /:username/links/:id`
+### `DELETE /:handle/links/:id`
 
 Delete a link.
 
@@ -219,7 +219,7 @@ curl -X DELETE http://localhost:3000/alice/links/1 \
 
 ---
 
-### `GET /:username/feed`
+### `GET /:handle/feed`
 
 Public RSS 2.0 feed of all links for a user, newest first.
 
@@ -253,7 +253,7 @@ curl http://localhost:3000/alice/feed
 
 ## API Key Management
 
-### `GET /:username/api-keys`
+### `GET /:handle/api-keys`
 
 List all API keys for the authenticated user. Returns metadata only (never the raw key).
 
@@ -279,7 +279,7 @@ curl http://localhost:3000/alice/api-keys \
 
 ---
 
-### `POST /:username/api-keys`
+### `POST /:handle/api-keys`
 
 Create a new API key. The raw key is returned **only once** in the response — store it securely.
 
@@ -320,7 +320,7 @@ curl -X POST http://localhost:3000/alice/api-keys \
 
 ---
 
-### `DELETE /:username/api-keys/:id`
+### `DELETE /:handle/api-keys/:id`
 
 Delete an API key by ID.
 
@@ -374,10 +374,10 @@ All errors follow a consistent format:
 
 ### `profiles` table
 
-| Column     | Type      | Description                       |
-| ---------- | --------- | --------------------------------- |
-| `id`       | uuid (PK) | User ID (matches Supabase auth)   |
-| `username` | text      | Unique username used in URL paths |
+| Column   | Type      | Description                     |
+| -------- | --------- | ------------------------------- |
+| `id`     | uuid (PK) | User ID (matches Supabase auth) |
+| `handle` | text      | Unique handle used in URL paths |
 
 ### `api_keys` table
 

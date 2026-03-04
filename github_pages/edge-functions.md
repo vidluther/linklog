@@ -29,7 +29,7 @@ CREATE TRIGGER on_link_insert_fetch_metadata
 
 The `notify_fetch_metadata()` function uses `pg_net` to make a fire-and-forget HTTP POST to the edge function with `?link_id={id}`.
 
-This means when you `POST /:username/links` with just a URL (no title), the metadata is fetched and populated automatically within a few seconds.
+This means when you `POST /:handle/links` with just a URL (no title), the metadata is fetched and populated automatically within a few seconds.
 
 ## Query Parameters
 

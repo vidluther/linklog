@@ -3,7 +3,7 @@ import { ApiKeysService } from "./api-keys.service";
 import { IS_PUBLIC_KEY } from "../auth/public.decorator";
 
 const USER_ID = "user-uuid-1";
-const USERNAME = "alice";
+const HANDLE = "alice";
 
 const mockApiKey = {
   id: "key-uuid-1",
@@ -36,7 +36,7 @@ describe("ApiKeysController", () => {
 
       const result = await controller.findAll({
         userId: USER_ID,
-        username: USERNAME,
+        handle: HANDLE,
       });
 
       expect(service.findAll).toHaveBeenCalledWith(USER_ID);
@@ -52,7 +52,7 @@ describe("ApiKeysController", () => {
       const dto = { name: "My Key" };
       const result = await controller.create(dto, {
         userId: USER_ID,
-        username: USERNAME,
+        handle: HANDLE,
       });
 
       expect(service.create).toHaveBeenCalledWith(dto, USER_ID);
@@ -66,7 +66,7 @@ describe("ApiKeysController", () => {
 
       const result = await controller.remove("key-uuid-1", {
         userId: USER_ID,
-        username: USERNAME,
+        handle: HANDLE,
       });
 
       expect(service.remove).toHaveBeenCalledWith("key-uuid-1", USER_ID);

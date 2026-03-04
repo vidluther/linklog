@@ -9,7 +9,7 @@ import { SUPABASE_CLIENT } from "../supabase/supabase.module.js";
 
 export interface UserProfile {
   id: string;
-  username: string;
+  handle: string;
 }
 
 @Injectable()
@@ -18,16 +18,16 @@ export class UsersService {
     @Inject(SUPABASE_CLIENT) private readonly supabase: SupabaseClient,
   ) {}
 
-  async findByUsername(username: string): Promise<UserProfile> {
+  async findByHandle(handle: string): Promise<UserProfile> {
     const { data, error } = await this.supabase
       .from("profiles")
-      .select("id, username")
-      .eq("username", username.toLowerCase())
+      .select("id, handle")
+      .eq("handle", handle.toLowerCase())
       .single();
 
     if (error) {
       if (error.code === "PGRST116") {
-        throw new NotFoundException(`User '${username}' not found`);
+        throw new NotFoundException(`User '${handle}' not found`);
       }
       throw new InternalServerErrorException(error.message);
     }

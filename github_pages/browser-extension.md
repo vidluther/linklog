@@ -49,7 +49,7 @@ pnpm clean:extension && pnpm build:extension
 Click the Linkblog extension icon to open the popup. Scroll to the **Settings** section:
 
 1. **API Key** — enter your `x-api-key` value (the raw key starting with `lb_`)
-2. **API Endpoint** — set to your links endpoint, e.g. `https://api.linkblog.in/alice/links` (replace `alice` with your username)
+2. **API Endpoint** — set to your links endpoint, e.g. `https://api.linkblog.in/alice/links` (replace `alice` with your handle)
 3. Click **Save Settings**
 
 Settings are stored in `browser.storage.sync` and persist across browser sessions.

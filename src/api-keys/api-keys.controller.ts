@@ -6,16 +6,16 @@ import { CurrentUser } from "../auth/current-user.decorator.js";
 
 interface AuthUser {
   userId: string;
-  username: string;
+  handle: string;
 }
 
 @ApiTags("API Keys")
 @ApiParam({
-  name: "username",
-  description: "The username of the API key owner",
+  name: "handle",
+  description: "The handle of the API key owner",
 })
 @ApiSecurity("api-key")
-@Controller(":username/api-keys")
+@Controller(":handle/api-keys")
 export class ApiKeysController {
   constructor(private readonly apiKeysService: ApiKeysService) {}
 

@@ -31,9 +31,9 @@ export interface ExtensionSettings {
   apiEndpoint: string;
 }
 
-// Default endpoint placeholder — users must replace {your-username} with their actual username.
-// Format: https://api.linkblog.in/{your-username}/links
+// Default endpoint placeholder — users must replace {your-handle} with their actual handle.
+// Format: https://api.linkblog.in/{your-handle}/links
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   apiKey: "",
-  apiEndpoint: "https://api.linkblog.in/{your-username}/links",
+  apiEndpoint: "https://api.linkblog.in/{your-handle}/links",
 };

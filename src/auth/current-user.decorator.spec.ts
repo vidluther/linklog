@@ -36,7 +36,7 @@ describe("@CurrentUser() decorator", () => {
   const extract = getDecoratorFactory(CurrentUser);
 
   it("returns request.user when set", () => {
-    const user = { userId: "abc-123", username: "vid" };
+    const user = { userId: "abc-123", handle: "vid" };
     const ctx = createMockContext(user);
 
     expect(extract(ctx)).toEqual(user);
@@ -49,11 +49,11 @@ describe("@CurrentUser() decorator", () => {
   });
 
   it("returns the full user object shape", () => {
-    const user = { userId: "uuid-here", username: "alice" };
+    const user = { userId: "uuid-here", handle: "alice" };
     const ctx = createMockContext(user);
     const result = extract(ctx) as typeof user;
 
     expect(result.userId).toBe("uuid-here");
-    expect(result.username).toBe("alice");
+    expect(result.handle).toBe("alice");
   });
 });

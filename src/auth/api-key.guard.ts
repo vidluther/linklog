@@ -51,10 +51,10 @@ export class ApiKeyGuard implements CanActivate {
 
     const userId: string = apiKeyRow.user_id;
 
-    // Resolve the username for this user
+    // Resolve the handle for this user
     const { data: profileRow, error: profileError } = await this.supabase
       .from("profiles")
-      .select("username")
+      .select("handle")
       .eq("id", userId)
       .single();
 
@@ -62,17 +62,17 @@ export class ApiKeyGuard implements CanActivate {
       throw new UnauthorizedException("Invalid API key");
     }
 
-    const username: string = profileRow.username;
+    const handle: string = profileRow.handle;
 
-    // If there is a :username param in the URL, verify the key owner matches
-    const usernameParam: string | undefined =
-      request.params?.username?.toLowerCase();
-    if (usernameParam && usernameParam !== username) {
+    // If there is a :handle param in the URL, verify the key owner matches
+    const handleParam: string | undefined =
+      request.params?.handle?.toLowerCase();
+    if (handleParam && handleParam !== handle) {
       throw new ForbiddenException("API key does not match the requested user");
     }
 
     // Attach user to the request
-    request.user = { userId, username };
+    request.user = { userId, handle };
 
     // Fire-and-forget: update last_used_at asynchronously
     void this.supabase
