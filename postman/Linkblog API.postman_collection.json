@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "2558c2dc-6226-48e8-bffb-4172f4d23bb3",
     "name": "Linkblog API",
-    "description": "Personal bookmarking API (NestJS + Supabase) that publishes an RSS feed.\n\n## Setup\n1. Import the **Linkblog - Local** environment\n2. Set the `userApiKey` variable to your API key value (format: `lb_<64 hex chars>`)\n3. Set the `username` variable to your profile username\n4. Start the server: `pnpm start:dev`\n5. Run requests — the collection auto-captures `linkId` from create/list responses\n\n## Auth\nAll write endpoints require the `x-api-key` header. The collection inherits this from the folder-level auth config.\n\n## URL convention\nAll endpoints are user-scoped: `/:username/links`, `/:username/feed`, `/:username/api-keys`",
+    "description": "Personal bookmarking API (NestJS + Supabase) that publishes an RSS feed.\n\n## Setup\n1. Import the **Linkblog - Local** environment\n2. Set the `userApiKey` variable to your API key value (format: `lb_<64 hex chars>`)\n3. Set the `handle` variable to your profile handle\n4. Start the server: `pnpm start:dev`\n5. Run requests — the collection auto-captures `linkId` from create/list responses\n\n## Auth\nAll write endpoints require the `x-api-key` header. The collection inherits this from the folder-level auth config.\n\n## URL convention\nAll endpoints are user-scoped: `/:handle/links`, `/:handle/feed`, `/:handle/api-keys`",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "19671261"
   },
@@ -74,9 +74,9 @@
               "raw": "{\n  \"url\": \"https://example.com\",\n  \"title\": \"Should Not Work\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links",
+              "raw": "{{baseUrl}}/{{handle}}/links",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "path": ["{{handle}}", "links"]
             },
             "description": "Attempt to create a link with no API key. Should return 401 Unauthorized."
           },
@@ -127,9 +127,9 @@
               "raw": "{\n  \"url\": \"https://example.com\",\n  \"title\": \"Should Not Work\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links",
+              "raw": "{{baseUrl}}/{{handle}}/links",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "path": ["{{handle}}", "links"]
             },
             "description": "Attempt to create a link with an invalid API key. Should return 401 Unauthorized."
           },
@@ -189,9 +189,9 @@
               "raw": "{\n  \"url\": \"https://\",\n  \"title\": \"Should Not Work\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links",
+              "raw": "{{baseUrl}}/{{handle}}/links",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "path": ["{{handle}}", "links"]
             },
             "description": "Attempt to create a link with an invalid API key. Should return 401 Unauthorized."
           },
@@ -280,9 +280,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links",
+              "raw": "{{baseUrl}}/{{handle}}/links",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "path": ["{{handle}}", "links"]
             },
             "description": "Create a new bookmarked link. On success, auto-saves the returned `id` to `linkId`."
           },
@@ -322,9 +322,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links",
+              "raw": "{{baseUrl}}/{{handle}}/links",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "path": ["{{handle}}", "links"]
             },
             "description": "Get all bookmarked links for the user, ordered newest first. Auto-saves the first link's `id` to `linkId`."
           },
@@ -364,9 +364,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links/{{linkId}}",
+              "raw": "{{baseUrl}}/{{handle}}/links/{{linkId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{linkId}}"]
+              "path": ["{{handle}}", "links", "{{linkId}}"]
             },
             "description": "Get a single link by ID. Uses `linkId` variable (auto-set by Create or List requests)."
           },
@@ -410,9 +410,9 @@
               "raw": "{\n  \"title\": \"Updated Title\",\n  \"summary\": \"Updated summary with new notes.\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links/{{linkId}}",
+              "raw": "{{baseUrl}}/{{handle}}/links/{{linkId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{linkId}}"]
+              "path": ["{{handle}}", "links", "{{linkId}}"]
             },
             "description": "Partially update a link. All body fields are optional. Uses `linkId` variable."
           },
@@ -440,9 +440,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links/{{linkId}}",
+              "raw": "{{baseUrl}}/{{handle}}/links/{{linkId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{linkId}}"]
+              "path": ["{{handle}}", "links", "{{linkId}}"]
             },
             "description": "Delete a link by ID. Uses `linkId` variable. Clears `linkId` on success."
           },
@@ -506,9 +506,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/feed",
+              "raw": "{{baseUrl}}/{{handle}}/feed",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "feed"]
+              "path": ["{{handle}}", "feed"]
             },
             "description": "Public RSS 2.0 feed of the user's links (newest first). No auth required."
           },
@@ -548,9 +548,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/api-keys",
+              "raw": "{{baseUrl}}/{{handle}}/api-keys",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "api-keys"]
+              "path": ["{{handle}}", "api-keys"]
             },
             "description": "List all API keys for the authenticated user. Returns id, name, created_at, last_used_at — never the raw key or hash."
           },
@@ -608,9 +608,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/api-keys",
+              "raw": "{{baseUrl}}/{{handle}}/api-keys",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "api-keys"]
+              "path": ["{{handle}}", "api-keys"]
             },
             "description": "Create a new API key. The `rawKey` field is returned only once — save it immediately. Auto-saves `apiKeyId`."
           },
@@ -638,9 +638,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/api-keys/{{apiKeyId}}",
+              "raw": "{{baseUrl}}/{{handle}}/api-keys/{{apiKeyId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "api-keys", "{{apiKeyId}}"]
+              "path": ["{{handle}}", "api-keys", "{{apiKeyId}}"]
             },
             "description": "Delete an API key by ID. Uses `apiKeyId` variable. Clears `apiKeyId` on success."
           },
@@ -704,9 +704,9 @@
               "raw": "{\n  \"url\": \"https://example.com/workflow-test\",\n  \"title\": \"Workflow Test Link\",\n  \"summary\": \"Created by the CRUD workflow runner.\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links",
+              "raw": "{{baseUrl}}/{{handle}}/links",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links"]
+              "path": ["{{handle}}", "links"]
             }
           },
           "response": []
@@ -735,9 +735,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
+              "raw": "{{baseUrl}}/{{handle}}/links/{{workflowLinkId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "path": ["{{handle}}", "links", "{{workflowLinkId}}"]
             }
           },
           "response": []
@@ -775,9 +775,9 @@
               "raw": "{\n  \"title\": \"Workflow Test Link (Updated)\",\n  \"summary\": \"Updated by the CRUD workflow runner.\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
+              "raw": "{{baseUrl}}/{{handle}}/links/{{workflowLinkId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "path": ["{{handle}}", "links", "{{workflowLinkId}}"]
             }
           },
           "response": []
@@ -811,9 +811,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
+              "raw": "{{baseUrl}}/{{handle}}/links/{{workflowLinkId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "path": ["{{handle}}", "links", "{{workflowLinkId}}"]
             }
           },
           "response": []
@@ -837,9 +837,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
+              "raw": "{{baseUrl}}/{{handle}}/links/{{workflowLinkId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "path": ["{{handle}}", "links", "{{workflowLinkId}}"]
             }
           },
           "response": []
@@ -866,9 +866,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/{{username}}/links/{{workflowLinkId}}",
+              "raw": "{{baseUrl}}/{{handle}}/links/{{workflowLinkId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["{{username}}", "links", "{{workflowLinkId}}"]
+              "path": ["{{handle}}", "links", "{{workflowLinkId}}"]
             }
           },
           "response": []
@@ -919,7 +919,7 @@
   ],
   "variable": [
     {
-      "key": "username",
+      "key": "handle",
       "value": "",
       "type": "default"
     }

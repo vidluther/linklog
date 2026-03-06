@@ -62,7 +62,7 @@ This runs `supabase/seed.sql` which inserts example data and configures the `app
 Before testing write endpoints, you need a user profile and API key. Insert a profile manually in the Supabase dashboard or via SQL:
 
 ```sql
-INSERT INTO profiles (id, username) VALUES ('your-auth-user-id', 'alice');
+INSERT INTO profiles (id, handle) VALUES ('your-auth-user-id', 'alice');
 ```
 
 Then create an API key via the API once the server is running (you'll need to insert an initial key hash manually, or use the Supabase dashboard to bootstrap).

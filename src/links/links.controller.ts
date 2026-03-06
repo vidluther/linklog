@@ -26,13 +26,13 @@ import { CurrentUser } from "../auth/current-user.decorator.js";
 
 interface AuthUser {
   userId: string;
-  username: string;
+  handle: string;
 }
 
 @ApiTags("Links")
-@ApiParam({ name: "username", description: "The username of the link owner" })
+@ApiParam({ name: "handle", description: "The handle of the link owner" })
 @ApiSecurity("api-key")
-@Controller(":username/links")
+@Controller(":handle/links")
 export class LinksController {
   constructor(
     private readonly linksService: LinksService,
@@ -54,8 +54,8 @@ export class LinksController {
     description: "List of all links for the user",
     type: [LinkResponseDto],
   })
-  async findAll(@Param("username") username: string) {
-    const profile = await this.usersService.findByUsername(username);
+  async findAll(@Param("handle") handle: string) {
+    const profile = await this.usersService.findByHandle(handle);
     return this.linksService.findAll(profile.id);
   }
 
@@ -66,8 +66,8 @@ export class LinksController {
     type: LinkResponseDto,
   })
   @ApiNotFoundResponse({ description: "Link not found" })
-  async findOne(@Param("username") username: string, @Param("id") id: string) {
-    const profile = await this.usersService.findByUsername(username);
+  async findOne(@Param("handle") handle: string, @Param("id") id: string) {
+    const profile = await this.usersService.findByHandle(handle);
     return this.linksService.findOne(+id, profile.id);
   }
 

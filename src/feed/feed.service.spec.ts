@@ -3,7 +3,7 @@ import { LinksService } from "../links/links.service";
 import { FeedService } from "./feed.service";
 
 const USER_ID = "user-uuid-1";
-const USERNAME = "alice";
+const HANDLE = "alice";
 
 const mockLink = {
   id: 1,
@@ -37,27 +37,27 @@ describe("FeedService", () => {
 
   describe("generateRssFeed", () => {
     it("should call linksService.findAll with the given userId", async () => {
-      await service.generateRssFeed(USER_ID, USERNAME);
+      await service.generateRssFeed(USER_ID, HANDLE);
 
       expect(linksService.findAll).toHaveBeenCalledWith(USER_ID);
     });
 
     it("should return a string of RSS XML", async () => {
-      const result = await service.generateRssFeed(USER_ID, USERNAME);
+      const result = await service.generateRssFeed(USER_ID, HANDLE);
 
       expect(typeof result).toBe("string");
       expect(result).toContain("<rss");
       expect(result).toContain("<channel>");
     });
 
-    it("should include the username in the feed title", async () => {
-      const result = await service.generateRssFeed(USER_ID, USERNAME);
+    it("should include the handle in the feed title", async () => {
+      const result = await service.generateRssFeed(USER_ID, HANDLE);
 
-      expect(result).toContain(USERNAME);
+      expect(result).toContain(HANDLE);
     });
 
     it("should include link items in the feed", async () => {
-      const result = await service.generateRssFeed(USER_ID, USERNAME);
+      const result = await service.generateRssFeed(USER_ID, HANDLE);
 
       expect(result).toContain("https://example.com");
     });
@@ -65,7 +65,7 @@ describe("FeedService", () => {
     it("should return a valid feed with no items when links list is empty", async () => {
       vi.mocked(linksService.findAll).mockResolvedValue([]);
 
-      const result = await service.generateRssFeed(USER_ID, USERNAME);
+      const result = await service.generateRssFeed(USER_ID, HANDLE);
 
       expect(result).toContain("<channel>");
     });

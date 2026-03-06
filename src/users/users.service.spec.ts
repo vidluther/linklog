@@ -8,7 +8,7 @@ import { SUPABASE_CLIENT } from "../supabase/supabase.module.js";
 
 const mockProfile = {
   id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-  username: "vid",
+  handle: "vid",
 };
 
 function createMockSupabase() {
@@ -42,28 +42,28 @@ describe("UsersService", () => {
     expect(service).toBeDefined();
   });
 
-  describe("findByUsername", () => {
-    it("should return the user profile for a known username", async () => {
+  describe("findByHandle", () => {
+    it("should return the user profile for a known handle", async () => {
       supabase.single.mockResolvedValue({ data: mockProfile, error: null });
 
-      const result = await service.findByUsername("vid");
+      const result = await service.findByHandle("vid");
 
       expect(result).toEqual(mockProfile);
       expect(supabase.from).toHaveBeenCalledWith("profiles");
-      expect(supabase.select).toHaveBeenCalledWith("id, username");
-      expect(supabase.eq).toHaveBeenCalledWith("username", "vid");
+      expect(supabase.select).toHaveBeenCalledWith("id, handle");
+      expect(supabase.eq).toHaveBeenCalledWith("handle", "vid");
     });
 
-    it("should throw NotFoundException for an unknown username", async () => {
+    it("should throw NotFoundException for an unknown handle", async () => {
       supabase.single.mockResolvedValue({
         data: null,
         error: { code: "PGRST116", message: "not found" },
       });
 
-      await expect(service.findByUsername("nobody")).rejects.toThrow(
+      await expect(service.findByHandle("nobody")).rejects.toThrow(
         NotFoundException,
       );
-      await expect(service.findByUsername("nobody")).rejects.toThrow(
+      await expect(service.findByHandle("nobody")).rejects.toThrow(
         "User 'nobody' not found",
       );
     });
@@ -74,7 +74,7 @@ describe("UsersService", () => {
         error: { code: "PGRST500", message: "unexpected db error" },
       });
 
-      await expect(service.findByUsername("vid")).rejects.toThrow(
+      await expect(service.findByHandle("vid")).rejects.toThrow(
         InternalServerErrorException,
       );
     });

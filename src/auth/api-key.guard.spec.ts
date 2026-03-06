@@ -15,7 +15,7 @@ describe("ApiKeyGuard", () => {
   const RAW_KEY = "lb_" + "a".repeat(64);
   const KEY_HASH = createHash("sha256").update(RAW_KEY).digest("hex");
   const USER_ID = "user-uuid-1";
-  const USERNAME = "alice";
+  const HANDLE = "alice";
 
   function buildSupabaseMock(opts: {
     apiKeyRow?: Record<string, unknown> | null;
@@ -26,7 +26,7 @@ describe("ApiKeyGuard", () => {
     const {
       apiKeyRow = { user_id: USER_ID },
       apiKeyError = null,
-      profileRow = { username: USERNAME },
+      profileRow = { handle: HANDLE },
       profileError = null,
     } = opts;
 
@@ -142,11 +142,11 @@ describe("ApiKeyGuard", () => {
     await expect(guard.canActivate(ctx)).rejects.toThrow(UnauthorizedException);
   });
 
-  it("should throw 403 when username param does not match key owner", async () => {
+  it("should throw 403 when handle param does not match key owner", async () => {
     vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     const ctx = createMockContext({
       headers: { "x-api-key": RAW_KEY },
-      params: { username: "bob" }, // key belongs to 'alice'
+      params: { handle: "bob" }, // key belongs to 'alice'
     });
 
     await expect(guard.canActivate(ctx)).rejects.toThrow(ForbiddenException);
@@ -155,21 +155,21 @@ describe("ApiKeyGuard", () => {
     );
   });
 
-  it("should attach request.user and return true for valid key with matching username", async () => {
+  it("should attach request.user and return true for valid key with matching handle", async () => {
     vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     const ctx = createMockContext({
       headers: { "x-api-key": RAW_KEY },
-      params: { username: USERNAME },
+      params: { handle: HANDLE },
     });
     const req = ctx.switchToHttp().getRequest();
 
     const result = await guard.canActivate(ctx);
 
     expect(result).toBe(true);
-    expect(req.user).toEqual({ userId: USER_ID, username: USERNAME });
+    expect(req.user).toEqual({ userId: USER_ID, handle: HANDLE });
   });
 
-  it("should attach request.user and return true when no username param (non-user-scoped route)", async () => {
+  it("should attach request.user and return true when no handle param (non-user-scoped route)", async () => {
     vi.spyOn(reflector, "getAllAndOverride").mockReturnValue(false);
     const ctx = createMockContext({
       headers: { "x-api-key": RAW_KEY },
@@ -180,7 +180,7 @@ describe("ApiKeyGuard", () => {
     const result = await guard.canActivate(ctx);
 
     expect(result).toBe(true);
-    expect(req.user).toEqual({ userId: USER_ID, username: USERNAME });
+    expect(req.user).toEqual({ userId: USER_ID, handle: HANDLE });
   });
 
   it("should update last_used_at asynchronously (fire-and-forget)", async () => {
@@ -195,7 +195,7 @@ describe("ApiKeyGuard", () => {
       error: null,
     });
     const singleProfileMock = vi.fn().mockResolvedValue({
-      data: { username: USERNAME },
+      data: { handle: HANDLE },
       error: null,
     });
 
@@ -219,7 +219,7 @@ describe("ApiKeyGuard", () => {
 
     const ctx = createMockContext({
       headers: { "x-api-key": RAW_KEY },
-      params: { username: USERNAME },
+      params: { handle: HANDLE },
     });
 
     await guard.canActivate(ctx);

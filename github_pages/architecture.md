@@ -26,9 +26,9 @@ Linkblog is a multi-user bookmarking API. There is no frontend — it is designe
 ┌──────────────────┐      ┌───────────────┴──────────────┐
 │  curl / apps /   │─────▶│         NestJS API            │
 │  browser ext.    │ HTTP  │                               │
-└──────────────────┘      │  /:username/links  (CRUD)     │
-                          │  /:username/feed   (RSS)      │
-                          │  /:username/api-keys (mgmt)   │
+└──────────────────┘      │  /:handle/links    (CRUD)     │
+                          │  /:handle/feed     (RSS)      │
+                          │  /:handle/api-keys (mgmt)     │
                           │  /health           (public)   │
                           │  /docs             (Swagger)  │
                           └───────────────────────────────┘
@@ -53,7 +53,7 @@ AppModule
 ├── LoggerModule          (global, nestjs-pino structured logging)
 ├── SupabaseModule        (global, provides Supabase client)
 ├── AuthModule            (global ApiKeyGuard via APP_GUARD)
-├── UsersModule           (username → user_id lookups)
+├── UsersModule           (handle → user_id lookups)
 ├── ApiKeysModule         (per-user API key CRUD)
 ├── LinksModule           (link CRUD service + controller)
 ├── FeedModule            (per-user RSS feed generation)
@@ -85,12 +85,12 @@ Registers the `ApiKeyGuard` as a global `APP_GUARD`. All routes are protected by
 1. Extracts the `x-api-key` header
 2. Hashes it with SHA-256
 3. Looks up the hash in the `api_keys` table
-4. Resolves the user's profile and attaches `{ userId, username }` to the request
-5. Verifies the `:username` URL param matches the key owner (403 if not)
+4. Resolves the user's profile and attaches `{ userId, handle }` to the request
+5. Verifies the `:handle` URL param matches the key owner (403 if not)
 
 ### UsersModule
 
-Provides `UsersService.findByUsername(username)` to resolve a username to a user ID. Used by `LinksController` and `FeedController` for public (unauthenticated) routes that need to scope data by user.
+Provides `UsersService.findByHandle(handle)` to resolve a handle to a user ID. Used by `LinksController` and `FeedController` for public (unauthenticated) routes that need to scope data by user.
 
 ### ApiKeysModule
 
@@ -98,11 +98,11 @@ CRUD for per-user API keys. Raw keys are generated as `lb_` + 32 random bytes (h
 
 ### LinksModule
 
-The core feature module. `LinksService` handles CRUD operations scoped by `user_id`. `LinksController` maps HTTP verbs to service methods at `/:username/links`.
+The core feature module. `LinksService` handles CRUD operations scoped by `user_id`. `LinksController` maps HTTP verbs to service methods at `/:handle/links`.
 
 ### FeedModule
 
-`FeedService` generates RSS 2.0 XML per user using the `feed` npm package. The feed title is `{username}'s Linkblog`. `FeedController` serves it at `GET /:username/feed` with `Content-Type: application/rss+xml`.
+`FeedService` generates RSS 2.0 XML per user using the `feed` npm package. The feed title is `{handle}'s Linkblog`. `FeedController` serves it at `GET /:handle/feed` with `Content-Type: application/rss+xml`.
 
 ### HealthModule
 
@@ -112,7 +112,7 @@ Simple `GET /health` returning `{ status: "ok" }`. Used by App Runner for health
 
 ### Multi-user with per-user API keys
 
-Each user has a `profiles` row and can create multiple named API keys. Keys are SHA-256 hashed before storage — the raw key is never persisted. URL paths are scoped by `:username` so each user's data is isolated.
+Each user has a `profiles` row and can create multiple named API keys. Keys are SHA-256 hashed before storage — the raw key is never persisted. URL paths are scoped by `:handle` so each user's data is isolated.
 
 ### Supabase as the data layer
 
@@ -137,21 +137,21 @@ The API is meant to be called from the [browser extension](browser-extension), s
 
 ## Request Flow (Protected Endpoints)
 
-1. Client sends HTTP request with `x-api-key` header to `/:username/links`
+1. Client sends HTTP request with `x-api-key` header to `/:handle/links`
 2. `ApiKeyGuard` extracts and SHA-256 hashes the API key
 3. Guard looks up `key_hash` in `api_keys` table → gets `user_id`
-4. Guard looks up `user_id` in `profiles` table → gets `username`
-5. Guard verifies URL `:username` param matches the key owner (403 if mismatch)
-6. Guard attaches `{ userId, username }` to `request.user`
+4. Guard looks up `user_id` in `profiles` table → gets `handle`
+5. Guard verifies URL `:handle` param matches the key owner (403 if mismatch)
+6. Guard attaches `{ userId, handle }` to `request.user`
 7. Controller delegates to service with the authenticated user's ID
 8. Service calls Supabase, checks `{ data, error }`, throws NestJS exceptions on failure
 9. Controller returns the response
 
 ## Request Flow (Public Endpoints)
 
-1. Client sends HTTP request to `/:username/links` (GET)
+1. Client sends HTTP request to `/:handle/links` (GET)
 2. `ApiKeyGuard` sees `@Public()` decorator → skips auth
-3. Controller calls `UsersService.findByUsername(username)` → gets user ID
+3. Controller calls `UsersService.findByHandle(handle)` → gets user ID
 4. Controller delegates to service with the resolved user ID
 5. Service returns scoped data
 
@@ -178,12 +178,12 @@ linkblog/
 │   ├── app.service.ts         # App-level service
 │   ├── auth/
 │   │   ├── auth.module.ts     # Registers global APP_GUARD
-│   │   ├── api-key.guard.ts   # SHA-256 key lookup + username verification
+│   │   ├── api-key.guard.ts   # SHA-256 key lookup + handle verification
 │   │   ├── public.decorator.ts    # @Public() to opt out of auth
 │   │   └── current-user.decorator.ts  # @CurrentUser() param decorator
 │   ├── users/
 │   │   ├── users.module.ts
-│   │   └── users.service.ts   # findByUsername()
+│   │   └── users.service.ts   # findByHandle()
 │   ├── api-keys/
 │   │   ├── api-keys.module.ts
 │   │   ├── api-keys.service.ts    # Key generation, hashing, CRUD

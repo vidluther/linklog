@@ -29,10 +29,10 @@ const RSS_EXAMPLE = `<?xml version="1.0" encoding="utf-8"?>
 
 @ApiTags("Feed")
 @ApiParam({
-  name: "username",
-  description: "The username whose feed to retrieve",
+  name: "handle",
+  description: "The handle whose feed to retrieve",
 })
-@Controller(":username/feed")
+@Controller(":handle/feed")
 export class FeedController {
   constructor(
     private readonly feedService: FeedService,
@@ -53,8 +53,8 @@ export class FeedController {
     },
   })
   @ApiNotFoundResponse({ description: "User not found" })
-  async getFeed(@Param("username") username: string): Promise<string> {
-    const profile = await this.usersService.findByUsername(username);
-    return this.feedService.generateRssFeed(profile.id, username);
+  async getFeed(@Param("handle") handle: string): Promise<string> {
+    const profile = await this.usersService.findByHandle(handle);
+    return this.feedService.generateRssFeed(profile.id, handle);
   }
 }

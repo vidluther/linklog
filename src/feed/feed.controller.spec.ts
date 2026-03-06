@@ -4,9 +4,9 @@ import { UsersService, UserProfile } from "../users/users.service.js";
 import { IS_PUBLIC_KEY } from "../auth/public.decorator";
 
 const USER_ID = "user-uuid-1";
-const USERNAME = "alice";
+const HANDLE = "alice";
 
-const mockUser: UserProfile = { id: USER_ID, username: USERNAME };
+const mockUser: UserProfile = { id: USER_ID, handle: HANDLE };
 
 describe("FeedController", () => {
   let controller: FeedController;
@@ -19,7 +19,7 @@ describe("FeedController", () => {
     } as unknown as FeedService;
 
     usersService = {
-      findByUsername: vi.fn().mockResolvedValue(mockUser),
+      findByHandle: vi.fn().mockResolvedValue(mockUser),
     } as unknown as UsersService;
 
     controller = new FeedController(feedService, usersService);
@@ -30,14 +30,11 @@ describe("FeedController", () => {
   });
 
   describe("getFeed", () => {
-    it("should resolve username and delegate to FeedService.generateRssFeed", async () => {
-      const result = await controller.getFeed(USERNAME);
+    it("should resolve handle and delegate to FeedService.generateRssFeed", async () => {
+      const result = await controller.getFeed(HANDLE);
 
-      expect(usersService.findByUsername).toHaveBeenCalledWith(USERNAME);
-      expect(feedService.generateRssFeed).toHaveBeenCalledWith(
-        USER_ID,
-        USERNAME,
-      );
+      expect(usersService.findByHandle).toHaveBeenCalledWith(HANDLE);
+      expect(feedService.generateRssFeed).toHaveBeenCalledWith(USER_ID, HANDLE);
       expect(result).toBe("<rss/>");
     });
   });

@@ -9,7 +9,7 @@ export class FeedService {
     private readonly configService: ConfigService,
   ) {}
 
-  async generateRssFeed(userId: string, username: string): Promise<string> {
+  async generateRssFeed(userId: string, handle: string): Promise<string> {
     const { Feed } = await import("feed");
     const links = await this.linksService.findAll(userId);
 
@@ -17,10 +17,10 @@ export class FeedService {
       "API_URL",
       "https://api.linkblog.in",
     );
-    const feedUrl = `${appUrl}/${username}/feed`;
+    const feedUrl = `${appUrl}/${handle}/feed`;
 
     const feed = new Feed({
-      title: `${username}'s Linkblog`,
+      title: `${handle}'s Linkblog`,
       description: "Things that I found interesting",
       id: feedUrl,
       link: feedUrl,

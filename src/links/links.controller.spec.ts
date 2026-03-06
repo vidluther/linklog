@@ -4,9 +4,9 @@ import { UsersService, UserProfile } from "../users/users.service.js";
 import { IS_PUBLIC_KEY } from "../auth/public.decorator";
 
 const USER_ID = "user-uuid-1";
-const USERNAME = "alice";
+const HANDLE = "alice";
 
-const mockUser: UserProfile = { id: USER_ID, username: USERNAME };
+const mockUser: UserProfile = { id: USER_ID, handle: HANDLE };
 
 const mockLink = {
   id: 1,
@@ -33,7 +33,7 @@ describe("LinksController", () => {
     } as unknown as LinksService;
 
     usersService = {
-      findByUsername: vi.fn().mockResolvedValue(mockUser),
+      findByHandle: vi.fn().mockResolvedValue(mockUser),
     } as unknown as UsersService;
 
     controller = new LinksController(linksService, usersService);
@@ -50,7 +50,7 @@ describe("LinksController", () => {
       const dto = { url: "https://example.com", title: "Example" };
       const result = await controller.create(dto, {
         userId: USER_ID,
-        username: USERNAME,
+        handle: HANDLE,
       });
 
       expect(result).toEqual(mockLink);
@@ -59,24 +59,24 @@ describe("LinksController", () => {
   });
 
   describe("findAll", () => {
-    it("should resolve username to userId and delegate to LinksService.findAll", async () => {
+    it("should resolve handle to userId and delegate to LinksService.findAll", async () => {
       vi.mocked(linksService.findAll).mockResolvedValue([mockLink]);
 
-      const result = await controller.findAll(USERNAME);
+      const result = await controller.findAll(HANDLE);
 
-      expect(usersService.findByUsername).toHaveBeenCalledWith(USERNAME);
+      expect(usersService.findByHandle).toHaveBeenCalledWith(HANDLE);
       expect(linksService.findAll).toHaveBeenCalledWith(USER_ID);
       expect(result).toEqual([mockLink]);
     });
   });
 
   describe("findOne", () => {
-    it("should resolve username to userId and delegate to LinksService.findOne", async () => {
+    it("should resolve handle to userId and delegate to LinksService.findOne", async () => {
       vi.mocked(linksService.findOne).mockResolvedValue(mockLink);
 
-      const result = await controller.findOne(USERNAME, "1");
+      const result = await controller.findOne(HANDLE, "1");
 
-      expect(usersService.findByUsername).toHaveBeenCalledWith(USERNAME);
+      expect(usersService.findByHandle).toHaveBeenCalledWith(HANDLE);
       expect(linksService.findOne).toHaveBeenCalledWith(1, USER_ID);
       expect(result).toEqual(mockLink);
     });
@@ -90,7 +90,7 @@ describe("LinksController", () => {
       const dto = { title: "Updated" };
       const result = await controller.update("1", dto, {
         userId: USER_ID,
-        username: USERNAME,
+        handle: HANDLE,
       });
 
       expect(linksService.update).toHaveBeenCalledWith(1, dto, USER_ID);
@@ -104,7 +104,7 @@ describe("LinksController", () => {
 
       const result = await controller.remove("1", {
         userId: USER_ID,
-        username: USERNAME,
+        handle: HANDLE,
       });
 
       expect(linksService.remove).toHaveBeenCalledWith(1, USER_ID);
